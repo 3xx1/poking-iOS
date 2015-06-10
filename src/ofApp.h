@@ -6,13 +6,15 @@
 #include "ofxGui.h"
 #include "ofxOsc.h"
 
+
 #define GRANURARITY     90
 #define LAYERS          60
 #define THICKNESS       1
 #define NUM_PARTICLES   GRANURARITY * LAYERS
+#define NUM_POLYGONS    (LAYERS-1)*(GRANURARITY*2)
 
-#define HOST "172.20.10.7"
-#define PORT 12345
+#define HOST "69.91.177.7"
+#define PORT 12001
 
 class ofApp : public ofxiOSApp {
     
@@ -36,22 +38,37 @@ public:
     void undoButtonPressed();
     void prnButtonPressed();
     
-    ofEasyCam cam;
-    ofVbo myVbo;
-    ofVec2f myPoints[100];
-    ofVec3f myVerts[NUM_PARTICLES];
-    ofFloatColor myColor[NUM_PARTICLES];
+    void touchDownEvent(int x, int y);
+    void touchMoveEvent(int x, int y);
     
+    ofEasyCam cam;
+    
+    ofVbo myVbo;
+    ofVbo wireframeVbo;
+    
+    ofVec3f myPoints[1000];
+    ofVec3f myVerts[NUM_PARTICLES];
+    ofVec3f vertsForDraw[NUM_POLYGONS];
+    ofFloatColor colorForDraw[NUM_POLYGONS];
+    ofFloatColor myColor[NUM_PARTICLES];
+        
     float radians[NUM_PARTICLES];
+    float speed;
+    
     ofxFloatSlider spd;
     ofxButton undo;
     ofxButton prn;
     ofxPanel gui;
     ofxPanel prngui;
     
+    ofLight light;
+    ofMaterial material;
+    
     int layor_n;
     int peak;
+    float digDepth;
     
     ofxOscSender sender;
+    
 };
 
